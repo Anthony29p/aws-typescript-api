@@ -1,23 +1,23 @@
-import { prop, getModelForClass, modelOptions } from '@typegoose/typegoose';
-import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
-@modelOptions({ options: { allowMixed: 0 } })
-export class CreditCard extends TimeStamps{
+//interfaz typescript
+// export interface ICreditCard {
+//     card_number: number,
+//     cvv: number,
+//     expiration_month:string,
+//     expiration_year: string,
+//     email: string,
+//     // date: Object,
+// }
 
-    @prop({ required: false, trim: true})
-    card_number: string;
-
-    @prop({ required: false, trim: true})
-    cvv: string;
-
-    @prop({ required: false, trim: true })
-    expiration_month: string;
-
-    @prop({ required: false, trim: true})
-    expiration_year: string;
-
-    @prop({ required: false, trim: true})
-    email: string;
-}
-
-export const CreditCardModel = getModelForClass(CreditCard)
+//Schema mongoose
+export const creditCard = new Schema({
+    id:String,
+    card_number: Number,
+    cvv: Number,
+    expiration_month:   String,
+    expiration_year: String,
+    email: String,
+    // date: { type: Date, default: Date.now },
+});

@@ -1,28 +1,23 @@
 import mongoose from "mongoose";
-import { blogSchema } from "./schema/schematest";
-
-
 
 let conn = null;
 
-export const connectDataBase = async (context) => {
+export const connectDataBaseModel = async (modelName:string,schema) => {
+    //Variables de entorno ya asignadas en serverless.ts
+    const {MONGO_USER, MONGO_PASSWORD, MONGO_HOST, DB_NAME} = process.env;
 
-    const {uri} = process.env
-
-    context.callbackWaitsForEmptyEventLoop = false;
     //Conexion
     if (conn == null) {
-    conn = mongoose.createConnection(uri, {
+    conn = mongoose.createConnection(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}/${DB_NAME}`, {
         serverSelectionTimeoutMS: 5000
     });
-
     await conn.asPromise();
-    conn.model('Test', blogSchema);
+    //Creacion del modelo
+    conn.model(modelName, schema);
     }
+    
+    //Conexion al modelo
+    const Modelo = conn.model(modelName);
 
-    //Creacion del model
-    const M = conn.model('Test');
-    //Uso de querys
-    const doc = await M.find();
-    return doc;
+    return Modelo;
 }

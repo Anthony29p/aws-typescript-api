@@ -1,14 +1,18 @@
-import { APIGatewayProxyHandler } from 'aws-lambda'
+import { connectDataBaseModel } from "src/database";
+import { creditCard } from "../database/schema/CreditCard";
 
-const AWS = require("aws-sdk");
 
-export const getCard: APIGatewayProxyHandler = async () => {
-  const dynamodb = new AWS.DynamoDB.DocumentClient();
-  const result = await dynamodb.scan({ TableName: "CardsTable" }).promise();
-  const card = result.Items;
+export const getCard = async (event,_context) => {
+  
+  _context.callbackWaitsForEmptyEventLoop = false;
+  
+  const Modelo = await connectDataBaseModel('CreditCardTest',creditCard)
+  //Uso de querys
+  const doc = await Modelo.find();
 
   return {
     statusCode: 200,
-    body: JSON.stringify({card}),
+    body: JSON.stringify(doc),
   };
 };
+  

@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript';
-
+require('dotenv').config()
 // import hello from '@functions/hello';
+
 
 const serverlessConfiguration: AWS = {
   service: 'aws-typescript-api',
@@ -16,8 +17,12 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      MONGO_USER:process.env.MONGO_USER,
+      MONGO_PASSWORD:process.env.MONGO_PASSWORD ,
+      MONGO_HOST:process.env.MONGO_HOST,
+      DB_NAME:process.env.DB_NAME,
     },
-    region:'us-east-2',
+    region:'us-west-2',
     iamRoleStatements:[
       {
         Effect: 'Allow',
@@ -60,51 +65,6 @@ const serverlessConfiguration: AWS = {
           }
         }
       ]
-    },
-    mongoTest: {
-      handler: 'src/functions/mongoTest.mongoTest',
-      events: [
-        {
-          http: {
-            method: 'get',
-            path: '/mongoTest',
-          }
-        }
-      ]
-    },
-  },
-  resources:{
-    Resources: {
-      CardsTable:{
-        Type: 'AWS::DynamoDB::Table',
-        Properties:{
-          TableName: "CardsTable",
-          KeySchema: [
-            {
-            AttributeName: "id",
-            KeyType: "HASH"
-          },
-          {
-            AttributeName: "card_number",
-            KeyType: "RANGE"
-          }
-          ],
-          AttributeDefinitions: [
-            {
-            AttributeName: "id",
-            AttributeType: "S",
-            },
-            {
-              AttributeName: "card_number",
-              AttributeType: "N",
-            },
-          ],
-          ProvisionedThroughput: {
-            ReadCapacityUnits: 1,
-            WriteCapacityUnits: 1
-          },
-        }
-      }
     },
   },
   package: { individually: true },
