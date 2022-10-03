@@ -24,20 +24,6 @@ export const getCard: APIGatewayProxyHandler = async (event,_context) => {
     const decoded = jwt.verify(token,'tokenKey')
 
     _context.callbackWaitsForEmptyEventLoop = false;
-  
-    //En el caso el tokem haya expirado
-    const ahora = new Date()
-
-    if(decoded.exp-(ahora.getTime()/1000)<=0){
-      return {
-        statusCode: 401,
-        body: JSON.stringify(
-          {
-            message: "expired tokem!"
-          },
-        ),
-      };
-    }
 
     const Modelo = await connectDataBaseModel('CreditCardTest',creditCardSchema)
     //Uso de querys
@@ -66,7 +52,7 @@ export const getCard: APIGatewayProxyHandler = async (event,_context) => {
       statusCode: 401,
       body: JSON.stringify(
         {
-          message: "invalid Token!"
+          message: "invalid or expired Token!"
         },
       ),
     };

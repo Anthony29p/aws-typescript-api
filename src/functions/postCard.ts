@@ -15,7 +15,7 @@ export const postCard: APIGatewayProxyHandler = async (event,_context) => {
   
   if(error==='no errors'){
     const id = v4()
-    const token:string =jwt.sign({id},'tokenKey',{expiresIn:15*60*1000})
+    const token:string =jwt.sign({id},'tokenKey',{expiresIn:15*60})
 
     const createdAt = new Date();
     
@@ -32,7 +32,7 @@ export const postCard: APIGatewayProxyHandler = async (event,_context) => {
     }
     const newCreditCard = new Modelo(newCard)
     await newCreditCard.save();
-    
+
     return {
       statusCode: 200,
       body: JSON.stringify(newCreditCard),
