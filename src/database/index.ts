@@ -15,10 +15,10 @@ export const connectDataBase = async (context) => {
     conn = mongoose.createConnection(uri, {
         serverSelectionTimeoutMS: 5000
     });
-
     await conn.asPromise();
-    conn.model('Test', blogSchema);
     }
+
+    conn.model('Test', blogSchema);
 
     //Creacion del model
     const M = conn.model('Test');
@@ -26,3 +26,5 @@ export const connectDataBase = async (context) => {
     const doc = await M.find();
     return doc;
 }
+// git remote set-url https://github.com/Anthony29p/aws-typescript-dynamo-api.git
+// git remote add origin https://github.com/Anthony29p/aws-typescript-dynamo-api.git
