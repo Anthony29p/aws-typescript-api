@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs'
 const { Schema } = mongoose;
 
 //interfaz typescript
@@ -12,12 +13,25 @@ const { Schema } = mongoose;
 // }
 
 //Schema mongoose
-export const creditCard = new Schema({
+const creditCardSchema = new Schema(
+    {
     id:String,
     card_number: Number,
     cvv: Number,
     expiration_month:   String,
     expiration_year: String,
     email: String,
-    // date: { type: Date, default: Date.now },
-});
+    createdAt: Date,
+    },
+    {
+        timestamps:false,
+        versionKey: false
+    }
+);
+
+creditCardSchema.statics.encryptCCV = async (cvv) => {
+    const salt = await bcrypt.genSalt(10)
+    return await bcrypt.hash(cvv,salt)
+}
+
+export default creditCardSchema

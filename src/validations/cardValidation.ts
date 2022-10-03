@@ -18,28 +18,28 @@ const luhnAlgorithm =(card_number:number) =>{
     return(sum%10===0)
 }
 
-export const cardValidation = (card_number:any) => {
+const cardValidation = (card_number:any) => {
     
     return(Number.isInteger(card_number) && Math.pow(10,13)<card_number && card_number<Math.pow(10,17) && luhnAlgorithm(card_number))
 }
 
-export const cvvValidation = (cvv:any) => {
+const cvvValidation = (cvv:any) => {
     
     return(Number.isInteger(cvv) && Math.pow(10,3)<cvv && cvv<=Math.pow(10,4))
 }
 
-export const monthValidation = (month:any) => {
+const monthValidation = (month:any) => {
     
     return(typeof month === 'string' && 0<Number(month) && Number(month)<=12)
 }
 
-export const yearValidation = (year:any) => {
+const yearValidation = (year:any) => {
     let fecha = new Date();
     let año = fecha.getFullYear()
     return(typeof year === 'string' && año-5<=Number(year) && Number(year)<=año+5)
 }
 
-export const emailValidation = (email:any) => {
+const emailValidation = (email:any) => {
     if(typeof email !== 'string' || email.indexOf('@') === -1){
         return(false)
     }
@@ -47,4 +47,17 @@ export const emailValidation = (email:any) => {
     let mailList =['gmail.com','hotmail.com','yahoo.es']
     const mailType = email.substring(email.indexOf('@')+1,email.length)
     return(mailList.some(m => m === mailType))
+}
+
+export const dataValidator = (card_number,cvv,expiration_month,expiration_year,email) => {
+
+    let error = 'error at'
+
+    if(!card_number || !cardValidation(card_number)){error +=' card_number'}
+    if(!cvv|| !cvvValidation(cvv)){error +=' cvv'}
+    if(!expiration_month || !monthValidation(expiration_month)){error +=' expiration_month'}
+    if(!expiration_year || !yearValidation(expiration_year)){error +=' expiration_year'}
+    if(!email || !emailValidation(email)){error +=' email'}
+
+    return(error==='error at'?'no errors':error)
 }
